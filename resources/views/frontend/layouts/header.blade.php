@@ -12,7 +12,7 @@
                 <div class="col-xl-2 col-7 col-md-8 col-lg-2">
                     <div class="wsus_logo_area">
                         <a class="wsus__header_logo" href="index.html">
-                            <img src="{{ asset('frontend/images/logo_2.png')}}" alt="logo" class="img-fluid w-100">
+                            <img src="images/logo_2.png" alt="logo" class="img-fluid w-100">
                         </a>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
             <ul>
                 <li>
                     <div class="wsus__cart_img">
-                        <a href="#"><img src="{{ asset('frontend/images/tab_2.jpg')}}" alt="product" class="img-fluid w-100"></a>
+                        <a href="#"><img src="images/tab_2.jpg" alt="product" class="img-fluid w-100"></a>
                         <a class="wsis__del_icon" href="#"><i class="fas fa-minus-circle"></i></a>
                     </div>
                     <div class="wsus__cart_text">
@@ -60,7 +60,7 @@
                 </li>
                 <li>
                     <div class="wsus__cart_img">
-                        <a href="#"><img src="{{ asset('frontend/images/pro4.jpg')}}" alt="product" class="img-fluid w-100"></a>
+                        <a href="#"><img src="images/pro4.jpg" alt="product" class="img-fluid w-100"></a>
                         <a class="wsis__del_icon" href="#"><i class="fas fa-minus-circle"></i></a>
                     </div>
                     <div class="wsus__cart_text">
@@ -70,7 +70,7 @@
                 </li>
                 <li>
                     <div class="wsus__cart_img">
-                        <a href="#"><img src="{{ asset('frontend/images/pro2.jpg')}}" alt="product" class="img-fluid w-100"></a>
+                        <a href="#"><img src="images/pro2.jpg" alt="product" class="img-fluid w-100"></a>
                         <a class="wsis__del_icon" href="#"><i class="fas fa-minus-circle"></i></a>
                     </div>
                     <div class="wsus__cart_text">
@@ -80,7 +80,7 @@
                 </li>
                 <li>
                     <div class="wsus__cart_img">
-                        <a href="#"><img src="{{ asset('frontend/images/pro9.jpg')}}" alt="product" class="img-fluid w-100"></a>
+                        <a href="#"><img src="images/pro9.jpg" alt="product" class="img-fluid w-100"></a>
                         <a class="wsis__del_icon" href="#"><i class="fas fa-minus-circle"></i></a>
                     </div>
                     <div class="wsus__cart_text">
@@ -90,7 +90,7 @@
                 </li>
                 <li>
                     <div class="wsus__cart_img">
-                        <a href="#"><img src="{{ asset('frontend/images/tab_2.jpg')}}" alt="product" class="img-fluid w-100"></a>
+                        <a href="#"><img src="images/tab_2.jpg" alt="product" class="img-fluid w-100"></a>
                         <a class="wsis__del_icon" href="#"><i class="fas fa-minus-circle"></i></a>
                     </div>
                     <div class="wsus__cart_text">
