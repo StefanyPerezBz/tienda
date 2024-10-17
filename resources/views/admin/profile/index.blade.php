@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 
-@section('section')
+@section('content')
     <section class="section">
         <div class="section-header">
             <h1>Perfil</h1>
