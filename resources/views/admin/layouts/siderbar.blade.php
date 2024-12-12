@@ -13,27 +13,33 @@
             </li>
             <li class="menu-header">Starter</li>
 
-            <li class="dropdown" style="cursor: pointer">
+            <li class="dropdown {{ setActive([
+                    'admin.category.*',
+                    'admin.subcategory',
+                    'admin.childcategory',
+                ]) }}" style="cursor: pointer">
                 <a class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-wrench"></i>
                     <span>Gestionar Categoría</span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="{{ route('admin.category.index') }}">Categoría</a></li>
+                    <li class="{{ setActive(['admin.category.*']) }}"><a class="nav-link" href="{{ route('admin.category.index') }}">Categoría</a></li>
                 </ul>
                 <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="{{ route('admin.subcategory.index') }}">Subcategoría</a></li>
+                    <li class="{{ setActive(['admin.subcategory.*']) }}"><a class="nav-link" href="{{ route('admin.subcategory.index') }}">Subcategoría</a></li>
                 </ul>
                 <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="{{ route('admin.childcategory.index') }}">Sub SubCategoría</a></li>
+                    <li class="{{ setActive(['admin.childcategory.*']) }}"><a class="nav-link" href="{{ route('admin.childcategory.index') }}">Sub SubCategoría</a></li>
                 </ul>
             </li>
 
-            <li class="dropdown" style="cursor: pointer">
+            <li class="dropdown {{ setActive([
+                    'admin.slider.*',
+                ]) }}" style="cursor: pointer">
                 <a class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-pager"></i>
                     <span>Gestionar Página</span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="{{ route('admin.slider.index') }}">Slider</a></li>
+                    <li class="{{ setActive(['admin.slider.*']) }}"><a class="nav-link" href="{{ route('admin.slider.index') }}">Slider</a></li>
                 </ul>
             </li>
             {{-- <li class="dropdown">
