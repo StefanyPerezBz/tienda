@@ -7,7 +7,7 @@ use DragonCode\Support\Filesystem\File as FilesystemFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -28,18 +28,17 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         if ($request->hasFile('image')) {
-            if (File::exists(public_path($user->image))) {
-                File::delete(public_path($user->image));
+            // Eliminar la imagen anterior si existe
+            if ($user->image && Storage::exists($user->image)) {
+                Storage::delete($user->image);
             }
-
-            $image = $request->image;
-            $imageName = rand() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('uploads'), $imageName);
-
-            $path = "/uploads/" . $imageName;
-
-            $user->image = $path;
-        }
+        
+            // Almacenar la nueva imagen en la carpeta 'profile'
+            $image = $request->file('image');
+            $path = $image->store('profile'); // Guarda en storage/app/profile
+        
+            $user->image = $path; // Guarda la ruta en la base de datos
+        }        
 
         $user->name = $request->name;
         $user->email = $request->email;

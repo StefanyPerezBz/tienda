@@ -9,19 +9,21 @@
     </form>
     <ul class="navbar-nav navbar-right">
 
-        <li class="dropdown"><a href="#" data-toggle="dropdown"
-                class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+        <li class="dropdown">
+            <a data-toggle="dropdown"
+                class="nav-link dropdown-toggle nav-link-lg nav-link-user" style="cursor: pointer">
                 @isset(Auth::user()->image)
                     <img alt="image" style="width: 40px;height: 40px;
         object-fit: cover;"
-                        src="{{ asset(auth()->user()->image) }}" class="rounded-circle mr-1 object-cover aspect-video">
+                        src="{{ Storage::url(Auth::user()->image) }}" class="rounded-circle mr-1 object-cover aspect-video">
                 @else
                     <img alt="image" style="width: 40px;height: 40px;
                 object-fit: cover;"
-                        src="{{ asset('backend/assets/img/avatar/avatar-1.png') }}" class="rounded-circle mr-1 object-cover aspect-video">
+                        src="{{ asset('backend/assets/img/avatar/avatar-1.png') }}"
+                        class="rounded-circle mr-1 object-cover aspect-video">
                 @endisset
 
-                <div class="d-sm-none d-lg-inline-block">Hola, {{ auth()->user()->name }}</div>
+                <div class="d-sm-none d-lg-inline-block">{{ Auth::user()->name }}</div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 <a href="{{ route('admin.profile') }}" class="dropdown-item has-icon">

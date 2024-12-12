@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sliders', function (Blueprint $table) {
+        Schema::create('sub_categories', function (Blueprint $table) {
             $table->id();
-            $table->text('banner')->nullable();
-            $table->string('type')->nullable();
-            $table->string('title')->unique()->nullable();
-            $table->decimal('starting_price', 8, 2)->nullable();
-            $table->string('btn_url')->nullable();
-            $table->integer('serial')->nullable();
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->string('name')->nullable()->unique();
+            $table->string('slug')->nullable()->unique();
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sliders');
+        Schema::dropIfExists('sub_categories');
     }
 };

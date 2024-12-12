@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-    <meta name='csrf-token' content="{{ csrf-token() }}"/>
-    <title>General Dashboard &mdash; Stisla</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>Dashboard Admin</title>
 
     <!-- General CSS Files -->
     <link rel="stylesheet" href="{{ asset('backend/assets/modules/bootstrap/css/bootstrap.min.css') }}">
@@ -31,7 +32,17 @@
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="{{ asset('backend/assets/css/bootstrap-iconpicker.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('backend/assets/css/bootstrap-iconpicker.css') }}"> --}}
 
+    <!-- Agregar el CDN de FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    {{-- Select2 --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    @stack('css')
 
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -79,8 +90,7 @@
     <script src="{{ asset('backend/assets/modules/jqvmap/dist/maps/jquery.vmap.world.js') }}"></script>
     <script src="{{ asset('backend/assets/modules/summernote/summernote-bs4.js') }}"></script>
     <script src="{{ asset('backend/assets/modules/chocolat/dist/js/jquery.chocolat.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
     <!-- Page Specific JS File -->
     <script src="{{ asset('backend/assets/js/page/index-0.js') }}"></script>
 
@@ -96,7 +106,10 @@
 
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="{{ asset('backend/assets/js/bootstrap-iconpicker.bundle.min.js') }}"></script>
 
+    {{-- Select2 --}}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script>
         @if ($errors->any())
@@ -111,60 +124,62 @@
     <!-- Dynamic Delete alart -->
 
     <script>
-        $(document).ready(function(){
+        $(document).ready(function() {
+
             $.ajaxSetup({
-                headers ={
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(content)
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
+            });
 
-            })
+            $('body').on('click', '.delete-item', function(event) {
 
-            $('body').on('click', '.delete-item', function(event){
                 event.preventDefault();
 
                 let deleteUrl = $(this).attr('href');
 
                 Swal.fire({
-  title: "Are you sure?",
-  text: "You won't be able to revert this!",
-  icon: "warning",
-  showCancelButton: true,
-  confirmButtonColor: "#3085d6",
-  cancelButtonColor: "#d33",
-  confirmButtonText: "Yes, delete it!"
-}).then((result) => {
-  if (result.isConfirmed) {
+                    title: "¿Está seguro?",
+                    text: "¡Ya no podrá revertirlo!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Sí, eliminar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
 
-$.ajax({
-    type: 'DELETE',
-    url: deleteUrl,
+                        $.ajax({
+                            type: 'DELETE',
+                            url: deleteUrl,
 
-    succes: function(data){
-      
-      if(data.status == 'succes'){
-      Swal.fire(
-      'Deleted!',
-      data.message
-    );
-    window.location.reload();
-    }else if(data.status == 'error'){
-        Swal.fire(
-      'Cant Delete',
-      data.message
-        )
+                            success: function(data) {
+                                if (data.status == 'success') {
+                                    Swal.fire(
+                                        "¡Eliminado!",
+                                        data.message,
+                                        "success"
+                                    ).then(() => {
+                                        window.location.reload();
+                                    });
+                                } else if (data.status == 'error') {
+                                    Swal.fire(
+                                        "No se pudo eliminar",
+                                        data.message,
+                                        "error"
+                                    );
+                                }
+                            },
 
-    }
+                            error: function(xhr, status, error) {
+                                console.log(error);
+                            }
+                        })
 
-    },
-    error: function(xhr, status, error){
-        console.log(error);
-    }
-})
-
-  }
-});
-
+                    }
+                });
             })
+
         })
     </script>
 

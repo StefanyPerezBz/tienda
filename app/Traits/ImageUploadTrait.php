@@ -3,7 +3,8 @@
 namespace App\Traits;
 
 use Illuminate\Http\Request;
-use File;
+use Illuminate\Support\Facades\File;
+
 
 trait ImageUploadTrait {
 

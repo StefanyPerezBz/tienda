@@ -9,16 +9,29 @@
         <ul class="sidebar-menu">
             <li class="menu-header">Dashboard</li>
             <li class="dropdown active">
-                <a href="#" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Dashboard</span></a>
-                <ul class="dropdown-menu">
-                    <li class=active><a class="nav-link" href="index-0.html">General Dashboard</a></li>
-                    <li><a class="nav-link" href="index.html">Ecommerce Dashboard</a></li>
-                </ul>
+                <a href="{{ route('admin.dashboard') }}" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Dashboard</span></a>
             </li>
             <li class="menu-header">Starter</li>
-            <li class="dropdown">
-                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i>
-                    <span>Gestionar Página</span></a>
+
+            <li class="dropdown" style="cursor: pointer">
+                <a class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-wrench"></i>
+                    <span>Gestionar Categoría</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="nav-link" href="{{ route('admin.category.index') }}">Categoría</a></li>
+                </ul>
+                <ul class="dropdown-menu">
+                    <li><a class="nav-link" href="{{ route('admin.subcategory.index') }}">Subcategoría</a></li>
+                </ul>
+                <ul class="dropdown-menu">
+                    <li><a class="nav-link" href="{{ route('admin.childcategory.index') }}">Sub SubCategoría</a></li>
+                </ul>
+            </li>
+
+            <li class="dropdown" style="cursor: pointer">
+                <a class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-pager"></i>
+                    <span>Gestionar Página</span>
+                </a>
                 <ul class="dropdown-menu">
                     <li><a class="nav-link" href="{{ route('admin.slider.index') }}">Slider</a></li>
                 </ul>

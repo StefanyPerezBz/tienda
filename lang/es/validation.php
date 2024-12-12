@@ -273,5 +273,9 @@ return [
         'winner'                   => 'ganador',
         'work'                     => 'trabajo',
         'year'                     => 'año',
+        'starting_price'           => 'precio inicial',
+        'btn_url'                  => 'URL de botón',
+        'serial'                   => 'serie',
+        'banner'                   => 'banner'
     ],
 ];

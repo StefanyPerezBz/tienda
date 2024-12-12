@@ -7,14 +7,15 @@
                 <div class="col-xl-12">
                     <div class="wsus__banner_content">
                         <div class="row banner_slider">
-                            @foreach($slider as $slider)
+                            @foreach($sliders as $slider)
                             <div class="col-xl-12">
-                                <div class="wsus__single_slider" style="background: url({{$slider -> banner}});">
+                                <div class="wsus__single_slider" style="background: url('{{ asset($slider->banner ? 'storage/banner/' . $slider->banner : 'default/image.jpg') }}') no-repeat center center/cover;"
+                                    >
                                     <div class="wsus__single_slider_text">
                                         <h3>{!! $slider -> type !!}</h3>
                                         <h1>{!! $slider -> title !!}</h1>
-                                        <h6>start at ${{$slider_starting_price}}</h6>
-                                        <a class="common_btn" href="{{$slider->btn_url}}">shop now</a>
+                                        <h6>Desde S/.{{$slider->starting_price}}</h6>
+                                        <a class="common_btn" href="{{$slider->btn_url}}">Comprar ahora</a>
                                     </div>
                                 </div>
                             </div>

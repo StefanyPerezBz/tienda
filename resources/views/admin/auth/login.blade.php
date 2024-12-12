@@ -91,8 +91,8 @@
                         </div>
 
                         <div class="card card-primary">
-                            <div class="card-header">
-                                <h4>Login</h4>
+                            <div class="card-header bg-primary text-white text-center justify-center">
+                                <h4>INICIAR SESIÓN</h4>
                             </div>
 
                             <div class="card-body">
@@ -121,7 +121,7 @@
                                         </div>
                                         <input id="password" type="password"
                                         class="form-control" name="password"
-                                            tabindex="2" required>
+                                            tabindex="2" required autofocus>
                                         <x-input-error :messages="$errors->get('password')" class="mt-2" />
                                         <div class="invalid-feedback">
                                             Por favor ingrese su contraseña
@@ -129,16 +129,8 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" name="remember" class="custom-control-input"
-                                                tabindex="3" id="remember_me" type="checkbox">
-                                            <label class="custom-control-label" for="remember-me">{{ __('Remember me') }}</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
                                         <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
-                                            {{ __('Log in') }}
+                                            Ingresar
                                         </button>
                                     </div>
                                 </form>

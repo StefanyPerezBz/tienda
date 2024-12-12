@@ -17,52 +17,89 @@
                             <h4>Crear Slider</h4>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('admin.slider.store') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('admin.slider.store') }}" method="POST" class="needs-validation"
+                                novalidate="" enctype="multipart/form-data">
                                 @csrf
+
                                 <div class="form-group">
                                     <label>Visualizar</label>
                                     <br>
                                     <img id="picture" width="200" src="{{ asset('default/image.jpg') }}"
                                         alt="">
                                 </div>
+
                                 <div class="form-group">
                                     <label>Banner</label>
                                     <input type="file" class="form-control" name="banner"
-                                        onchange="cambiarImagen(event)">
+                                        onchange="cambiarImagen(event)" required autofocus>
+                                    <div class="invalid-feedback">
+                                        Por favor escoja la imagen
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Tipo</label>
-                                    <input type="text" class="form-control" name="type" value="{{ old('type') }}">
+                                    <input type="text" class="form-control" name="type" value="{{ old('type') }}"
+                                        placeholder="Ej. Edición Exclusiva, Promoción de Temporada, Últimos Lanzamientos .." required autofocus>
+                                    <div class="invalid-feedback">
+                                        Por favor ingrese el tipo de slider
+                                    </div>
                                 </div>
+
                                 <div class="form-group">
                                     <label>Título</label>
-                                    <input type="text" class="form-control" name="title" value="{{ old('title') }}">
+                                    <input type="text" class="form-control" name="title" value="{{ old('title') }}"
+                                        placeholder="Ej.Tendencias que Marcan Estilo, Descubre Descuentos Irresistibles .." required autofocus>
+                                    <div class="invalid-feedback">
+                                        Por favor ingrese el título del slider
+                                    </div>
                                 </div>
+
                                 <div class="form-group">
                                     <label>Precio inicial</label>
-                                    <input type="text" class="form-control" name="starting_price"
-                                        value="{{ old('starting_price') }}">
+                                    <input type="number" class="form-control" name="starting_price"
+                                        value="{{ old('starting_price') }}" min="1" 
+                                        step="0.01" required autofocus>
+                                    <div class="invalid-feedback">
+                                        Por favor ingrese un precio inicial válido. Solo se permiten números con hasta dos decimales.
+                                    </div>
                                 </div>
+
                                 <div class="form-group">
                                     <label>
                                         URL del botón</label>
-                                    <input type="text" class="form-control" name="btn_url" value="{{ old('btn_url') }}">
+                                    <input type="text" class="form-control" name="btn_url" value="{{ old('btn_url') }}"
+                                        placeholder="Dirección web (enlace)" required autofocus>
+                                    <div class="invalid-feedback">
+                                        Por favor ingrese la URL
+                                    </div>
                                 </div>
+
                                 <div class="form-group">
                                     <label>Serie</label>
-                                    <input type="text" class="form-control" name="serial" value="{{ old('serial') }}">
+                                    <input type="number" class="form-control" name="serial" value="{{ old('serial') }}"
+                                        placeholder="Orden en que se muestra el slider (1,2 ..)" min="1" required autofocus>
+                                    <div class="invalid-feedback">
+                                        Por favor ingrese la serie del slider
+                                    </div>
                                 </div>
+
                                 <div class="form-group">
-                                    <label for="inputState">Estado</label>
-                                    <select id="inputState" class="form-control" name="status">
+                                    <label for="status">Estado</label>
+                                    <select id="status" class="form-control" name="status" required>
                                         <option value="" disabled selected>Seleccionar estado</option>
-                                        <option value="1">Activo</option>
-                                        <option value="0">Inactivo</option>
+                                        <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Activo
+                                        </option>
+                                        <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>
+                                            Inactivo</option>
                                     </select>
+                                    <div class="invalid-feedback">
+                                        Por favor ingrese el estado del slider
+                                    </div>
                                 </div>
+
                                 <div class="d-flex justify-content-between">
-                                  <button type="submit" class="btn btn-success">Crear</button>
+                                    <button type="submit" class="btn btn-success">Crear</button>
 
                                     <a href="{{ route('admin.slider.index') }}" class="btn btn-primary">Regresar</a>
                                 </div>

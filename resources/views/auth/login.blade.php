@@ -104,7 +104,7 @@
                                                 <label class="form-check-label" for="flexSwitchCheckDefault">Sesión Activa</label>
                                             </div>
                                             @if (Route::has('password.request'))
-                                            <a class="forget_p" href="{{ route('password.request') }}">¿Contraseña Olvidada?</a>
+                                            <a class="forget_p" href="{{ route('password.request') }}">¿Olvidaste tu contraseña?</a>
                                             @endif
                                         </div>
                                         <button class="common_btn" type="submit">Ingresar</button>
