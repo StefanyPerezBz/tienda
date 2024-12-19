@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -15,32 +16,29 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         DB::table('users')->insert([
+            [
+                'name' => env('ADMIN_NAME'),
+                'email' => env('ADMIN_NAME'),
+                'password' => Hash::make(env('ADMIN_PASSWORD')),
+                'role' => env('ADMIN_ROL'),
+                'status' => env('ADMIN_STATUS')
+            ],
 
             [
-                'name'=>'Administrador',
-                'email'=>'admin@gmail.com',
-                'password'=>bcrypt('password'),
-                'role' => 'admin',
-                'status' => 'active'
-               ],
-   
-               [
-                   'name'=>'Vendedor',
-                   'email'=>'vendor@gmail.com',
-                   'password'=>bcrypt('password'),
-                   'role' => 'vendor',
-                   'status' => 'active'
-                  ],
-   
-                  [
-                   'name'=>'Usuario',
-                   'email'=>'user@gmail.com',
-                   'password'=>bcrypt('password'),
-                   'role' => 'user',
-                   'status' => 'active'
-                  ],
-   
-        ]);
+                'name' => env('VENDEDOR_NAME'),
+                'email' => env('VENDEDOR_NAME'),
+                'password' => Hash::make(env('VENDEDOR_PASSWORD')),
+                'role' => env('VENDEDOR_ROL'),
+                'status' => env('VENDEDOR_STATUS')
+            ],
 
+            [
+                'name' => env('USUARIO_NAME'),
+                'email' => env('USUARIO_NAME'),
+                'password' => Hash::make(env('USUARIO_PASSWORD')),
+                'role' => env('USUARIO_ROL'),
+                'status' => env('USUARIO_STATUS')
+            ],
+        ]);
     }
 }
