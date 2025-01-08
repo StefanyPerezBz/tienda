@@ -61,22 +61,22 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $slug)
     {
-        $category = Category::findOrFail($id);
+        $category = Category::where('slug', $slug)->firstOrFail();
         return view('admin.category.edit', compact('category'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $slug)
     {
-        $category = Category::findOrFail($id);
+        $category = Category::where('slug', $slug)->firstOrFail();
 
         $request->validate([
             'icon' => 'required|not_in:empty',
-            'name' => 'required|max:200|unique:categories,name,' . $id,
+            'name' => 'required|max:200|unique:categories,name,' . $category->id,
             'status' => 'required|in:active,inactive',
         ]);
 
@@ -92,16 +92,16 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $slug)
     {
-        $category = Category::findOrFail($id);
+        $category = Category::where('slug', $slug)->firstOrFail();
+
         $subCategory = SubCategory::where('category_id', $category->id)->count();
-        if($subCategory > 0){
-             return response(['status' => 'error', 'message' => 'Estos elementos contienen subelementos para eliminarlos. ¡Primero debe eliminar los subelementos!']);
-         }
+        if ($subCategory > 0) {
+            return response(['status' => 'error', 'message' => 'Estos elementos contienen subelementos para eliminarlos. ¡Primero debe eliminar los subelementos!']);
+        }
         $category->delete();
 
         return response(['status' => 'success', 'message' => '¡Categoría eliminada exitosamente!']);
-
     }
 }

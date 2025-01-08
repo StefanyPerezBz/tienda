@@ -15,9 +15,16 @@ class ChildCategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function __construct()
+    {
+        $this->middleware('ensureCategoryAndSubCategoryExists')->except('index');
+    }
+    
     public function index(ChildCategoryDataTable $dataTable)
     {
-        return $dataTable->render('admin.childcategory.index');
+        $hasActiveCategory = Category::where('status', 'active')->exists();
+        $hasActiveSubCategory = SubCategory::where('status', 'active')->exists();
+        return $dataTable->render('admin.childcategory.index', compact('hasActiveCategory', 'hasActiveSubCategory'));
     }
 
     /**
@@ -31,7 +38,7 @@ class ChildCategoryController extends Controller
 
     public function getSubCategories(Request $request)
     {
-        $subCategories = SubCategory::where('category_id', $request->id)->where('status', 1)->get();
+        $subCategories = SubCategory::where('category_id', $request->id)->where('status', 'active')->get();
         return $subCategories;
     }
 
@@ -73,10 +80,10 @@ class ChildCategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $slug)
     {
         $categories = Category::where('status', 'active')->get();
-        $childcategory = ChildCategory::findOrFail($id);
+        $childcategory = ChildCategory::where('slug', $slug)->firstOrFail();
         $subcategories = SubCategory::where('category_id', $childcategory->category_id)
         ->where('status', 'active')
         ->get();
@@ -87,16 +94,16 @@ class ChildCategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $slug)
     {
+        $childCategory = ChildCategory::where('slug', $slug)->firstOrFail();
+
         $request->validate([
             'category' => 'required|exists:categories,id',
             'subcategory' => 'required|exists:sub_categories,id',
-            'name' => 'required|max:200|unique:child_categories,name,' . $id . ',id',
+            'name' => 'required|max:200|unique:child_categories,name,' . $childCategory->id,
             'status' => 'required|in:active,inactive'
         ]);
-
-        $childCategory = ChildCategory::findOrFail($id);
 
         $childCategory->category_id = $request->category;
         $childCategory->sub_category_id = $request->subcategory;
@@ -112,9 +119,9 @@ class ChildCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-     public function destroy(string $id)
+     public function destroy(string $slug)
      {
-         $childCategory = ChildCategory::findOrFail($id);
+         $childCategory = ChildCategory::where('slug', $slug)->firstOrFail();
          
     //     if(Product::where('child_category_id', $childCategory->id)->count() > 0){
     //         return response(['status' => 'error', 'message' => 'This item contain relation can\'t delete it.']);

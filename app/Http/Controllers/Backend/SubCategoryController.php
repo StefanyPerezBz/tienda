@@ -15,9 +15,15 @@ class SubCategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function __construct()
+    {
+        $this->middleware('ensureCategoryExists')->except('index');
+    }
+    
     public function index(SubCategoryDataTable $dataTable)
     {
-        return $dataTable->render('admin.subcategory.index');
+        $hasActiveCategory = Category::where('status', 'active')->exists();
+        return $dataTable->render('admin.subcategory.index', compact('hasActiveCategory'));
     }
 
     /**
@@ -62,25 +68,27 @@ class SubCategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $slug)
     {
         $categories = Category::where('status', 'active')->get();
-        $subcategory = SubCategory::findOrFail($id);
+
+        $subcategory = SubCategory::where('slug', $slug)->firstOrFail();
+        
         return view('admin.subcategory.edit', compact('subcategory', 'categories'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $slug)
     {
+        $subCategory = SubCategory::where('slug', $slug)->firstOrFail();
+
         $request->validate([
             'category' => 'required|exists:categories,id',
-            'name' => 'required|max:200|unique:sub_categories,name,' . $id,
+            'name' => 'required|max:200|unique:sub_categories,name,' . $subCategory->id,
             'status' => 'required|in:active,inactive'
         ]);
-
-        $subCategory = SubCategory::findOrFail($id);
 
         $subCategory->category_id = $request->category;
         $subCategory->name = $request->name;
@@ -94,9 +102,10 @@ class SubCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $slug)
     {
-        $subcategory = SubCategory::findOrFail($id);
+        $subcategory = SubCategory::where('slug', $slug)->firstOrFail();
+
         $childCategory = ChildCategory::where('sub_category_id', $subcategory->id)->count();
 
         if ($childCategory > 0) {

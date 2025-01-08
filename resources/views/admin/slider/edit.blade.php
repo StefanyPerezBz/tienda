@@ -29,7 +29,7 @@
                                         <img src="{{ asset('storage/banner/' . $slider->banner) }}" alt="Banner Img" id="picture"
                                             class="img-thumbnail" width="200">
                                     @else
-                                        <img id="picture" alt="image" src="{{ asset('default/image.jpg') }}"
+                                        <img id="picture" alt="Banner Img" src="{{ asset('default/image.jpg') }}"
                                             class="img-thumbnail" width="200">
                                     @endisset
                                 </div>

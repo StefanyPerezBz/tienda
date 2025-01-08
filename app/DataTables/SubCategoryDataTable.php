@@ -23,15 +23,15 @@ class SubCategoryDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('actions', function($query){
-                $editBtn = "<a href='".route('admin.subcategory.edit', $query->id)."' class='btn btn-primary btn-sm'><i class='far fa-edit'></i></a>";
-                $deleteBtn = "<a href='".route('admin.subcategory.destroy', $query->id)."' class='btn btn-danger ml-2 btn-sm delete-item'><i class='far fa-trash-alt'></i></a>";
+                $editBtn = "<a href='".route('admin.subcategory.edit', $query->slug)."' class='btn btn-primary btn-sm'><i class='far fa-edit'></i></a>";
+                $deleteBtn = "<a href='".route('admin.subcategory.destroy', $query->slug)."' class='btn btn-danger ml-2 btn-sm delete-item'><i class='far fa-trash-alt'></i></a>";
 
                 return $editBtn.$deleteBtn;
             })
             ->addColumn('category_id', function($query){
                 return $query->category->name;
             })
-            ->addColumn('estatus', function($query){
+            ->addColumn('status', function($query){
                 if($query->status == 'active'){
                     $button = '<label class="custom-switch mt-2">
                         <input type="checkbox" checked name="custom-switch-checkbox" data-id="'.$query->id.'" class="custom-switch-input" disabled>
@@ -45,7 +45,7 @@ class SubCategoryDataTable extends DataTable
                 }
                 return $button;
             })            
-            ->rawColumns(['category_id', 'actions', 'estatus'])
+            ->rawColumns(['category_id', 'actions', 'status'])
             ->setRowId('id');
     }
 
@@ -106,7 +106,7 @@ class SubCategoryDataTable extends DataTable
             Column::make('id')->title('#')->width(100),
             Column::make('category_id')->title('Categoría')->width(100),
             Column::make('name')->title('Nombre'),
-            Column::make('estatus')->title('Estado')->width(200),
+            Column::make('status')->title('Estado')->width(200),
             Column::computed('actions')
             ->title('Acciones')
             ->exportable(false)

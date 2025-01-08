@@ -13,9 +13,11 @@
                     <div class="card shadow-sm">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h4>Listado de subcategorías</h4>
-                            <a href="{{ route('admin.subcategory.create') }}" class="btn btn-primary"><i
-                                    class="fas fa-plus"></i>
-                                Crear subcategoría</a>
+                            @if ($hasActiveCategory)
+                                <a href="{{ route('admin.subcategory.create') }}" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i> Crear subcategoría
+                                </a>
+                            @endif
                         </div>
                         <div class="table-responsive card-body">
                             {{ $dataTable->table() }}

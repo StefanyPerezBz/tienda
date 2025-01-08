@@ -23,8 +23,8 @@ class ChildCategoryDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('actions', function ($query) {
-                $editBtn = "<a href='" . route('admin.childcategory.edit', $query->id) . "' class='btn btn-primary btn-sm'><i class='far fa-edit'></i></a>";
-                $deleteBtn = "<a href='" . route('admin.childcategory.destroy', $query->id) . "' class='btn btn-danger ml-2 btn-sm delete-item'><i class='far fa-trash-alt'></i></a>";
+                $editBtn = "<a href='" . route('admin.childcategory.edit', $query->slug) . "' class='btn btn-primary btn-sm'><i class='far fa-edit'></i></a>";
+                $deleteBtn = "<a href='" . route('admin.childcategory.destroy', $query->slug) . "' class='btn btn-danger ml-2 btn-sm delete-item'><i class='far fa-trash-alt'></i></a>";
 
                 return $editBtn . $deleteBtn;
             })
@@ -34,7 +34,7 @@ class ChildCategoryDataTable extends DataTable
             ->addColumn('subcategory_id', function ($query) {
                 return $query->subcategory->name;
             })
-            ->addColumn('estatus', function ($query) {
+            ->addColumn('status', function ($query) {
                 if ($query->status == 'active') {
                     $button = '<label class="custom-switch mt-2">
                     <input type="checkbox" checked name="custom-switch-checkbox" data-id="' . $query->id . '" class="custom-switch-input" disabled>
@@ -48,7 +48,7 @@ class ChildCategoryDataTable extends DataTable
                 }
                 return $button;
             })
-            ->rawColumns(['category_id', 'actions', 'estatus'])
+            ->rawColumns(['category_id', 'actions', 'status'])
             ->setRowId('id');
     }
 
@@ -110,7 +110,7 @@ class ChildCategoryDataTable extends DataTable
             Column::make('category_id')->title('Categoría')->width(100),
             Column::make('subcategory_id')->title('SubCategoría')->width(100),
             Column::make('name')->title('Nombre'),
-            Column::make('estatus')->title('Estado')->width(200),
+            Column::make('status')->title('Estado')->width(200),
             Column::computed('actions')
             ->title('Acciones')
             ->exportable(false)

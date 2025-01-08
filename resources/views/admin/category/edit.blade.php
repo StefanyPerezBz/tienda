@@ -16,7 +16,7 @@
                             <h4>Editar Categoría</h4>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('admin.category.update', $category->id) }}" method="POST"
+                            <form action="{{ route('admin.category.update', $category->slug) }}" method="POST"
                                 class="needs-validation" novalidate="" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
