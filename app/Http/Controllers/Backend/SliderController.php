@@ -139,8 +139,8 @@ class SliderController extends Controller
         try {
             $slider = Slider::findOrFail($id);
     
-            if (File::exists(public_path($slider->banner))) {
-                File::delete(public_path($slider->banner));
+            if ($slider->logo && Storage::exists('banner/' . $slider->banner)) {
+                Storage::delete('banner/' . $slider->banner);
             }
     
             $slider->delete();
