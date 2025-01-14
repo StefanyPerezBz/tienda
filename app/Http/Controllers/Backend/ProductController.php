@@ -150,7 +150,7 @@ class ProductController extends Controller
 
         $request->validate([
             'name' => 'required|max:200|regex:/^[\p{L}\s]+$/u|unique:products,name,' . $product->id,
-            'thumb_image' => 'required|image|mimes:jpeg,png,jpg|max:3000',
+            'thumb_image' => 'nullable|image|mimes:jpeg,png,jpg|max:3000',
             'category' => 'required|exists:categories,id',
             'sub_category' => 'required|exists:sub_categories,id',
             'child_category' => 'required|exists:child_categories,id',

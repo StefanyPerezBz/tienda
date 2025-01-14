@@ -37,7 +37,7 @@
                                 <div class="form-group">
                                     <label>Imagen</label>
                                     <input type="file" class="form-control" name="thumb_image"
-                                        onchange="cambiarImagen(event)" required autofocus>
+                                        onchange="cambiarImagen(event)" autofocus>
                                     <div class="invalid-feedback">
                                         Por favor escoja la imagen
                                     </div>
@@ -147,7 +147,7 @@
                                 <div class="form-group">
                                     <label>Precio de oferta</label>
                                     <input type="number" step="0.01" class="form-control" name="offer_price"
-                                        value="{{ old('offer_price') }}" min="1" autofocus
+                                        value="{{ $product->offer_price  }}" min="1" autofocus
                                         placeholder="Ejemplo: 40,99">
                                     <div class="invalid-feedback">
                                         Por favor ingrese el precio de oferta del producto
@@ -160,7 +160,7 @@
                                         <div class="form-group">
                                             <label>Fecha de inicio de oferta</label>
                                             <input type="text" class="form-control datepicker" name="offer_start_date"
-                                                value="{{ old('offer_start_date') }}" autofocus>
+                                                value="{{ $product->offer_start_date }}" autofocus>
                                             <div class="invalid-feedback">
                                                 Por favor ingrese la fecha de inicio de la oferta
                                             </div>
@@ -171,7 +171,7 @@
                                         <div class="form-group">
                                             <label>Fecha de fin de oferta</label>
                                             <input type="text" class="form-control datepicker" name="offer_end_date"
-                                                value="{{ old('offer_end_date') }}" autofocus>
+                                                value="{{ $product->offer_end_date }}" autofocus>
                                             <div class="invalid-feedback">
                                                 Por favor ingrese la fecha de fin de la oferta
                                             </div>
@@ -182,7 +182,7 @@
                                 <div class="form-group">
                                     <label>Stock</label>
                                     <input type="number" min="0" class="form-control" name="qty"
-                                        value="{{ old('qty') }}" required autofocus placeholder="Ejemplo: 50">
+                                        value="{{ $product->qty }}" required autofocus placeholder="Ejemplo: 50">
                                     <div class="invalid-feedback">
                                         Por favor ingrese el stock del producto
                                     </div>
@@ -191,7 +191,7 @@
                                 <div class="form-group">
                                     <label>Link de video</label>
                                     <input type="text" class="form-control" name="video_link"
-                                        value="{{ old('video_link') }}" placeholder="Ejemplo: https://www.youtube.com"
+                                        value="{{ $product->video_link }}" placeholder="Ejemplo: https://www.youtube.com"
                                         autofocus>
                                     <div class="invalid-feedback">
                                         Por favor ingrese el link de video
@@ -203,7 +203,7 @@
                                     <label>Descripción corta</label>
                                     <div class="ckeditor">
                                         <textarea id="short_description" name="short_description" class="form-control"
-                                            placeholder="Ejemplo: Camiseta deportiva de alta calidad."></textarea>
+                                            placeholder="Ejemplo: Camiseta deportiva de alta calidad.">{!! $product->short_description !!}</textarea>
                                     </div>
                                     <div class="invalid-feedback">
                                         Por favor ingrese la descripción corta
@@ -214,8 +214,8 @@
                                 <div class="form-group">
                                     <label>Descripción larga</label>
                                     <div class="ckeditor">
-                                        <textarea id="long_description" name="long_description" class="form-control"
-                                            placeholder="Ejemplo: Esta camiseta está hecha con tecnología Dri-FIT para mantenerte seco y cómodo"></textarea>
+                                        <textarea id="long_description" name="long_description" class="form-control" value="{{ $product->long_description }}"
+                                            placeholder="Ejemplo: Esta camiseta está hecha con tecnología Dri-FIT para mantenerte seco y cómodo">{!! $product->long_description !!}</textarea>
                                     </div>
                                     <div class="invalid-feedback">
                                         Por favor ingrese la descripción larga
@@ -300,7 +300,7 @@
                                 <div class="form-group">
                                     <label>Título SEO del producto</label>
                                     <input type="text" class="form-control" name="seo_title"
-                                        value="{{ old('seo_title') }}" autofocus
+                                        value="{{ $product->seo_title }}" autofocus
                                         placeholder="Ejemplo: Camiseta Nike Dri-FIT para hombres">
                                     <div class="invalid-feedback">
                                         Por favor ingrese el título SEO
@@ -311,7 +311,7 @@
                                     <label>Descripción SEO del producto</label>
                                     <div class="ckeditor">
                                         <textarea name="seo_description" id="seo_description" class="form-control"
-                                            placeholder="Ejemplo: Compra la camiseta Nike Dri-FIT para hombres. Comodidad y rendimiento en un solo lugar"></textarea>
+                                            placeholder="Ejemplo: Compra la camiseta Nike Dri-FIT para hombres. Comodidad y rendimiento en un solo lugar">{!! $product->seo_description !!}</textarea>
                                     </div>
                                     <div class="invalid-feedback">
                                         Por favor ingrese la descripción SEO
