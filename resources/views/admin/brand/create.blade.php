@@ -88,7 +88,9 @@
 
         </div>
     </section>
+@endsection
 
+@push('scripts')
     <script>
         // Cambiar la imagen
         document.getElementById("image").addEventListener('change', cambiarImagen);
@@ -102,4 +104,4 @@
             reader.readAsDataURL(file);
         }
     </script>
-@endsection
+@endpush

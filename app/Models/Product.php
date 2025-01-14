@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'name',
         'slug',
@@ -36,4 +36,19 @@ class Product extends Model
         'seo_title',
         'seo_description'
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function subCategory()
+    {
+        return $this->belongsTo(SubCategory::class, 'sub_category_id');
+    }
+
+    public function childCategory()
+    {
+        return $this->belongsTo(ChildCategory::class, 'child_category_id');
+    }
 }

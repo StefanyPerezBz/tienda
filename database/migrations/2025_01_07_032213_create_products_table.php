@@ -33,7 +33,7 @@ return new class extends Migration
             $table->enum('is_top', ['Si', 'No'])->default('No');
             $table->enum('is_best', ['Si', 'No'])->default('No');
             $table->enum('is_featured', ['Si', 'No'])->default('No');
-            $table->string('product_type')->nullable();
+            $table->enum('product_type', ['nueva_llegada', 'destacado', 'producto_top', 'mejor_producto']);
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->enum('is_approved', ['active', 'inactive'])->default('active');
             $table->string('seo_title')->nullable();

@@ -26,8 +26,8 @@
                                     <label>Visualizar</label>
                                     <br>
                                     @isset($slider->banner)
-                                        <img src="{{ asset('storage/banner/' . $slider->banner) }}" alt="Banner Img" id="picture"
-                                            class="img-thumbnail" width="200">
+                                        <img src="{{ asset('storage/banner/' . $slider->banner) }}" alt="Banner Img"
+                                            id="picture" class="img-thumbnail" width="200">
                                     @else
                                         <img id="picture" alt="Banner Img" src="{{ asset('default/image.jpg') }}"
                                             class="img-thumbnail" width="200">
@@ -46,7 +46,8 @@
                                 <div class="form-group">
                                     <label>Tipo</label>
                                     <input type="text" class="form-control" name="type" value="{{ $slider->type }}"
-                                    placeholder="Ej. Edición Exclusiva, Promoción de Temporada, Últimos Lanzamientos .." required autofocus>
+                                        placeholder="Ej. Edición Exclusiva, Promoción de Temporada, Últimos Lanzamientos .."
+                                        required autofocus>
                                     <div class="invalid-feedback">
                                         Por favor ingrese el tipo de slider
                                     </div>
@@ -55,7 +56,8 @@
                                 <div class="form-group">
                                     <label>Título</label>
                                     <input type="text" class="form-control" name="title" value="{{ $slider->title }}"
-                                        placeholder="Ej.Tendencias que Marcan Estilo, Descubre Descuentos Irresistibles .." required autofocus>
+                                        placeholder="Ej.Tendencias que Marcan Estilo, Descubre Descuentos Irresistibles .."
+                                        required autofocus>
                                     <div class="invalid-feedback">
                                         Por favor ingrese el título del slider
                                     </div>
@@ -64,10 +66,11 @@
                                 <div class="form-group">
                                     <label>Precio inicial</label>
                                     <input type="number" class="form-control" name="starting_price"
-                                    value="{{ old('starting_price', $slider->starting_price ?? '') }}"  min="1"
-                                    step="0.01" required autofocus>
+                                        value="{{ old('starting_price', $slider->starting_price ?? '') }}" min="1"
+                                        step="0.01" required autofocus>
                                     <div class="invalid-feedback">
-                                        Por favor ingrese un precio inicial válido. Solo se permiten números con hasta dos decimales.
+                                        Por favor ingrese un precio inicial válido. Solo se permiten números con hasta dos
+                                        decimales.
                                     </div>
                                 </div>
 
@@ -83,7 +86,8 @@
                                 <div class="form-group">
                                     <label>Serie</label>
                                     <input type="number" class="form-control" name="serial" value="{{ $slider->serial }}"
-                                        placeholder="Orden en que se muestra el slider (1,2 ..)" min="1" required autofocus>
+                                        placeholder="Orden en que se muestra el slider (1,2 ..)" min="1" required
+                                        autofocus>
                                     <div class="invalid-feedback">
                                         Por favor ingrese la serie del slider
                                     </div>
@@ -118,7 +122,9 @@
 
         </div>
     </section>
+@endsection
 
+@push('scripts')
     <script>
         // Cambiar la imagen
         document.getElementById("image").addEventListener('change', cambiarImagen);
@@ -132,4 +138,4 @@
             reader.readAsDataURL(file);
         }
     </script>
-@endsection
+@endpush

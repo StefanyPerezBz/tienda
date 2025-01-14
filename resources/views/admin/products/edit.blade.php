@@ -14,18 +14,24 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Crear Producto</h4>
+                            <h4>Editar Producto</h4>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('admin.products.store') }}" method="POST" class="needs-validation"
-                                novalidate="" enctype="multipart/form-data">
+                            <form action="{{ route('admin.products.update', $product->slug) }}" method="POST"
+                                class="needs-validation" novalidate="" enctype="multipart/form-data">
                                 @csrf
+                                @method('PUT')
 
                                 <div class="form-group">
                                     <label>Visualizar</label>
                                     <br>
-                                    <img id="picture" width="200" src="{{ asset('default/image.jpg') }}"
-                                        alt="">
+                                    @isset($product->thumb_image)
+                                        <img src="{{ asset('storage/product/' . $product->thumb_image) }}" alt="Banner Img"
+                                            id="picture" class="img-thumbnail" width="200">
+                                    @else
+                                        <img id="picture" alt="Banner Img" src="{{ asset('default/image.jpg') }}"
+                                            class="img-thumbnail" width="200">
+                                    @endisset
                                 </div>
 
                                 <div class="form-group">
@@ -42,7 +48,7 @@
                                     <label>Nombre del producto</label>
                                     <input type="text" class="form-control"
                                         placeholder="Ejemplo; Camiseta Nike Dri-FIT..." name="name"
-                                        value="{{ old('name') }}" required autofocus>
+                                        value="{{ $product->name }}" required autofocus>
                                     <div class="invalid-feedback">
                                         Por favor ingrese el nombre del producto
                                     </div>
@@ -52,10 +58,11 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="inputState">Categoría</label>
-                                            <select id="mainCategory"  name="category" class="form-control" required>
+                                            <select id="mainCategory" name="category" class="form-control" required>
                                                 <option value="" disabled selected>Seleccionar categoría</option>
                                                 @foreach ($categories as $category)
-                                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                    <option {{ $category->id == $product->category_id ? 'selected' : '' }}
+                                                        value="{{ $category->id }}">{{ $category->name }}</option>
                                                 @endforeach
                                             </select>
                                             <div class="invalid-feedback">
@@ -67,8 +74,14 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="inputState">Sub Categoría</label>
-                                            <select id="subCategory" name="sub_category" class="form-control" disabled required>
+                                            <select id="subCategory" name="sub_category" class="form-control" disabled
+                                                required>
                                                 <option value="" disabled selected>Seleccionar subcategoría</option>
+                                                @foreach ($subcategories as $subcategory)
+                                                    <option
+                                                        {{ $subcategory->id == $product->sub_category_id ? 'selected' : '' }}
+                                                        value="{{ $subcategory->id }}">{{ $subcategory->name }}</option>
+                                                @endforeach
                                             </select>
                                             <div class="invalid-feedback">
                                                 Por favor ingrese la subcategoría del producto
@@ -79,9 +92,17 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="inputState">Sub Subcategoría</label>
-                                            <select id="childCategory" class="form-control" name="child_category" disabled required>
+                                            <select id="childCategory" class="form-control" name="child_category" disabled
+                                                required>
                                                 <option value="" disabled selected>Seleccionar sub subcategoría
                                                 </option>
+
+                                                @foreach ($childcategories as $childcategory)
+                                                    <option
+                                                        {{ $childcategory->id == $product->child_category_id ? 'selected' : '' }}
+                                                        value="{{ $childcategory->id }}">{{ $childcategory->name }}
+                                                    </option>
+                                                @endforeach
                                             </select>
                                             <div class="invalid-feedback">
                                                 Por favor ingrese la sub subcategoría del producto
@@ -96,7 +117,8 @@
                                     <select id="inputState" class="form-control" name="brand" required>
                                         <option value="" disabled selected>Seleccionar marca</option>
                                         @foreach ($brands as $brand)
-                                            <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                                            <option {{ $brand->id == $product->brand_id ? 'selected' : '' }}
+                                                value="{{ $brand->id }}">{{ $brand->name }}</option>
                                         @endforeach
                                     </select>
                                     <div class="invalid-feedback">
@@ -106,7 +128,7 @@
 
                                 <div class="form-group">
                                     <label>SKU (Código único de identificación del producto)</label>
-                                    <input type="text" class="form-control" name="sku" value="{{ old('sku') }}"
+                                    <input type="text" class="form-control" name="sku" value="{{ $product->sku }}"
                                         placeholder="Ejemplo:NK-DF-001">
                                     <div class="invalid-feedback">
                                         Por favor ingrese el SKU del producto
@@ -115,8 +137,8 @@
 
                                 <div class="form-group">
                                     <label>Precio</label>
-                                    <input type="number" class="form-control" name="price" value="{{ old('price') }}"
-                                        required min="1" step="0.01" autofocus placeholder="Ejemplo: 50,99">
+                                    <input type="number" class="form-control" name="price"
+                                        required min="1" step="0.01" autofocus placeholder="Ejemplo: 50,99" value="{{ $product->price }}">
                                     <div class="invalid-feedback">
                                         Por favor ingrese el precio del producto
                                     </div>
@@ -206,9 +228,9 @@
                                             <label>¿Destacar producto?</label>
                                             <select id="is_top" class="form-control" name="is_top" required>
                                                 <option value="" disabled selected>Seleccionar estado</option>
-                                                <option value="Si" {{ old('is_top') == 'Si' ? 'selected' : '' }}>Sí
+                                                <option value="Si" {{ $product->is_top == 'Si' ? 'selected' : '' }}>Sí
                                                 </option>
-                                                <option value="No" {{ old('is_top') == 'No' ? 'selected' : '' }}>No
+                                                <option value="No" {{ $product->is_top == 'No' ? 'selected' : '' }}>No
                                                 </option>
                                             </select>
                                             <div class="invalid-feedback">
@@ -222,10 +244,10 @@
                                             <label>¿Marcar como uno de los mejores productos?</label>
                                             <select id="is_best" class="form-control" name="is_best" required>
                                                 <option value="" disabled selected>Seleccionar estado</option>
-                                                <option value="Si" {{ old('is_best') == 'Si' ? 'selected' : '' }}>Sí
-                                                </option>
-                                                <option value="No" {{ old('is_best') == 'No' ? 'selected' : '' }}>No
-                                                </option>
+                                                <option value="Si" {{ $product->is_best == 'Si' ? 'selected' : '' }}>
+                                                    Sí</option>
+                                                <option value="No" {{ $product->is_best == 'No' ? 'selected' : '' }}>
+                                                    No</option>
                                             </select>
                                             <div class="invalid-feedback">
                                                 Por favor ingrese si desea marcar como uno de los mejores productos
@@ -238,12 +260,10 @@
                                             <label>¿Quiere destacar el producto en la página principal?</label>
                                             <select id="is_featured" class="form-control" name="is_featured" required>
                                                 <option value="" disabled selected>Seleccionar estado</option>
-                                                <option value="Si" {{ old('is_featured') == 'Si' ? 'selected' : '' }}>
-                                                    Sí
-                                                </option>
-                                                <option value="No" {{ old('is_featured') == 'No' ? 'selected' : '' }}>
-                                                    No
-                                                </option>
+                                                <option value="Si"
+                                                    {{ $product->is_featured == 'Si' ? 'selected' : '' }}>Sí</option>
+                                                <option value="No"
+                                                    {{ $product->is_featured == 'No' ? 'selected' : '' }}>No</option>
                                             </select>
                                             <div class="invalid-feedback">
                                                 Por favor ingrese si desea marcar el producto como destacado en la página
@@ -253,31 +273,29 @@
                                     </div>
                                 </div>
 
+
                                 <div class="form-group">
                                     <label for="inputState">Tipo de producto</label>
                                     <select id="inputState" class="form-control" name="product_type" required>
-                                        <option value="" disabled selected>Seleccionar tipo de producto
-                                        </option>
+                                        <option value="" disabled selected>Seleccionar tipo de producto</option>
                                         <option value="nueva_llegada"
-                                            {{ old('product_type') == 'nueva_llegada' ? 'selected' : '' }}>Recién llegado
-                                        </option>
+                                            {{ $product->product_type == 'nueva_llegada' ? 'selected' : '' }}>Recién
+                                            llegado</option>
                                         <option value="destacado"
-                                            {{ old('product_type') == 'destacado' ? 'selected' : '' }}>
-                                            Destacado
+                                            {{ $product->product_type == 'destacado' ? 'selected' : '' }}>Destacado
                                         </option>
                                         <option value="producto_top"
-                                            {{ old('product_type') == 'producto_top' ? 'selected' : '' }}>
-                                            Producto top
+                                            {{ $product->product_type == 'producto_top' ? 'selected' : '' }}>Producto top
                                         </option>
                                         <option value="mejor_producto"
-                                            {{ old('product_type') == 'mejor_producto' ? 'selected' : '' }}>
-                                            Mejor producto
-                                        </option>
+                                            {{ $product->product_type == 'mejor_producto' ? 'selected' : '' }}>Mejor
+                                            producto</option>
                                     </select>
                                     <div class="invalid-feedback">
                                         Por favor ingrese el tipo de producto
                                     </div>
                                 </div>
+
 
                                 <div class="form-group">
                                     <label>Título SEO del producto</label>
@@ -304,9 +322,9 @@
                                     <label for="status">Estado</label>
                                     <select id="status" class="form-control" name="status" required>
                                         <option value="" disabled selected>Seleccionar estado</option>
-                                        <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Activo
+                                        <option value="active" {{ $product->status == 'active' ? 'selected' : '' }}>Activo
                                         </option>
-                                        <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>
+                                        <option value="inactive" {{ $product->status == 'inactive' ? 'selected' : '' }}>
                                             Inactivo</option>
                                     </select>
                                     <div class="invalid-feedback">
@@ -353,6 +371,43 @@
             const subCategory = document.getElementById('subCategory');
             const childCategory = document.getElementById('childCategory');
 
+            const initializeSubCategories = () => {
+                const selectedCategoryId = mainCategory.value;
+                const selectedCategory = categories.find(category => category.id == selectedCategoryId);
+
+                subCategory.innerHTML =
+                    '<option value="" disabled selected>Seleccionar subcategoría</option>';
+                childCategory.innerHTML =
+                    '<option value="" disabled selected>Seleccionar sub subcategoría</option>';
+                childCategory.disabled = true;
+
+                if (selectedCategory && selectedCategory.subcategories.length > 0) {
+                    subCategory.disabled = false;
+                    selectedCategory.subcategories.forEach(subcategory => {
+                        subCategory.innerHTML +=
+                            `<option value="${subcategory.id}" ${subcategory.id == '{{ $product->sub_category_id }}' ? 'selected' : ''}>${subcategory.name}</option>`;
+                    });
+
+                    // Cargar sub subcategorías si hay una subcategoría seleccionada
+                    const selectedSubCategoryId = subCategory.value;
+                    const selectedSubCategory = selectedCategory.subcategories.find(subcategory => subcategory
+                        .id == selectedSubCategoryId);
+
+                    if (selectedSubCategory && selectedSubCategory.child_categories.length > 0) {
+                        childCategory.disabled = false;
+                        selectedSubCategory.child_categories.forEach(childCategoryItem => {
+                            childCategory.innerHTML +=
+                                `<option value="${childCategoryItem.id}" ${childCategoryItem.id == '{{ $product->child_category_id }}' ? 'selected' : ''}>${childCategoryItem.name}</option>`;
+                        });
+                    }
+                } else {
+                    subCategory.disabled = true;
+                }
+            };
+
+            // Inicializar subcategorías y sub subcategorías
+            initializeSubCategories();
+
             // Al cambiar la categoría principal
             mainCategory.addEventListener('change', function() {
                 const selectedCategoryId = this.value;
@@ -398,6 +453,7 @@
             });
         });
     </script>
+
 
     <script src="{{ asset('ckeditor5/build/ckeditor.js') }}"></script>
 

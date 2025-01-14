@@ -12,6 +12,9 @@ use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use Exception;
+
 
 class ProductController extends Controller
 {
@@ -28,9 +31,13 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = Category::with('subcategories.childCategories')
-        ->where('status', 'active')
-        ->get();
+        // Obtener todas las categorías sin filtro de estado
+        $categories = Category::with(['subcategories' => function ($query) {
+            $query->where('status', 'active');
+        }, 'subcategories.childCategories' => function ($query) {
+            $query->where('status', 'active');
+        }])->get();
+
         $brands = Brand::all();
 
         return view('admin.products.create', compact('categories', 'brands'));
@@ -50,7 +57,7 @@ class ProductController extends Controller
             'child_category' => 'required|exists:child_categories,id',
             'brand' => 'required|exists:brands,id',
             'qty' => 'required|numeric|min:0|regex:/^\d+(\.\d{1,2})?$/',
-            'short_description' => 'required',
+            'short_description' => 'required|max:600',
             'long_description' => 'required',
             'video_link' => 'nullable|url|regex:/^https?:\/\/[^\s]+$/',
             'sku' => 'nullable',
@@ -58,12 +65,11 @@ class ProductController extends Controller
             'offer_price' => 'nullable|numeric|min:1|regex:/^\d+(\.\d{1,2})?$/',
             'offer_start_date' => 'nullable|date|before:offer_end_date',
             'offer_end_date' => 'nullable|date|after:offer_start_date',
-            'product_type' => 'nullable',
+            'product_type' => 'nullable|in:nueva_llegada,destacado,producto_top,mejor_producto',
             'is_top' => 'required|in:Si,No',
             'is_best' => 'required|in:Si,No',
             'is_featured' => 'required|in:Si,No',
             'status' => 'required|in:active,inactive',
-            'is_approved' => 'required|in:active,inactive',
             'seo_title' => 'nullable',
             'seo_description' => 'nullable',
         ]);
@@ -71,12 +77,11 @@ class ProductController extends Controller
         $product = new Product();
 
         // Manejo de la imagen
-        if ($request->hasFile('banner')) {
-            $path = $request->file('banner')->store('banner');
-            $product_image = str_replace('banner/', '', $path);
-            $product->banner = $product_image;
+        if ($request->hasFile('thumb_image')) {
+            $path = $request->file('thumb_image')->store('product');
+            $product_image = str_replace('product/', '', $path);
+            $product->thumb_image = $product_image;
         }
-
 
         $product->name = $request->name;
         $product->slug = Str::slug($request->name);
@@ -101,9 +106,11 @@ class ProductController extends Controller
         $product->is_featured = $request->is_featured;
         $product->status = $request->status;
         $product->seo_title = $request->seo_title;
-        $product->is_approved = $request->is_approved;
+        $product->is_approved = 'active';
         $product->seo_description = $request->seo_description;
         $product->save();
+
+        return redirect()->route('admin.products.index')->with('success', 'Producto creado exitosamente.');
     }
 
     /**
@@ -117,22 +124,29 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $slug)
     {
-        $product = Product::findOrFail($id);
-        $subCategories = SubCategory::where('category_id', $product->category_id)->get();
-        $childCategories = ChildCategory::where('sub_category_id', $product->sub_category_id)->get();
-        $categories = Category::all();
+        $product = Product::where('slug', $slug)->firstOrFail();
+
+        $subcategories = SubCategory::where('status', 'active')->get();
+        $childcategories = ChildCategory::where('status', 'active')->get();
+        $categories = Category::with(['subcategories' => function ($query) {
+            $query->where('status', 'active');
+        }, 'subcategories.childCategories' => function ($query) {
+            $query->where('status', 'active');
+        }])->get();
+
         $brands = Brand::all();
-        return view('admin.products.edit', compact('product', 'categories', 'brands', 'subCategories', 'childCategories'));
+        
+        return view('admin.products.edit', compact('product', 'categories', 'brands', 'subcategories', 'childcategories'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $slug)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::where('slug', $slug)->firstOrFail();
 
         $request->validate([
             'name' => 'required|max:200|regex:/^[\p{L}\s]+$/u|unique:products,name,' . $product->id,
@@ -142,7 +156,7 @@ class ProductController extends Controller
             'child_category' => 'required|exists:child_categories,id',
             'brand' => 'required|exists:brands,id',
             'qty' => 'required|numeric|min:0|regex:/^\d+(\.\d{1,2})?$/',
-            'short_description' => 'required',
+            'short_description' => 'required|max:600',
             'long_description' => 'required',
             'video_link' => 'nullable|url|regex:/^https?:\/\/[^\s]+$/',
             'sku' => 'nullable',
@@ -150,22 +164,37 @@ class ProductController extends Controller
             'offer_price' => 'nullable|numeric|min:1|regex:/^\d+(\.\d{1,2})?$/',
             'offer_start_date' => 'nullable|date|before:offer_end_date',
             'offer_end_date' => 'nullable|date|after:offer_start_date',
-            'product_type' => 'nullable',
+            'product_type' => 'required|in:nueva_llegada,destacado,producto_top,mejor_producto',
             'status' => 'required|in:active,inactive',
             'is_top' => 'required|in:Si,No',
             'is_best' => 'required|in:Si,No',
             'is_featured' => 'required|in:Si,No',
             'status' => 'required|in:active,inactive',
-            'is_approved' => 'required|in:active,inactive',
             'seo_title' => 'nullable',
             'seo_description' => 'nullable',
         ]);
+
+        // Manejo de la imagen
+        if ($request->hasFile('thumb_image')) {
+            // Eliminar la imagen anterior si existe
+            if ($product->thumb_image && Storage::exists('product/' . $product->thumb_image)) {
+                Storage::delete('product/' . $product->thumb_image);
+            }
+
+            // Almacenar la nueva imagen
+            $path = $request->file('thumb_image')->store('product');
+            $product_image = str_replace('product/', '', $path);
+            $product->thumb_image = $product_image;
+        } else {
+            // Mantener la imagen actual si no se envió una nueva
+            $product_image = $product->thumb_image;
+        }
 
         $product->name = $request->name;
         $product->slug = Str::slug($request->name);
         $product->vendor_id = Auth::user()->vendor->id;
         $product->category_id = $request->category;
-        $product->sub_category_id = $request;
+        $product->sub_category_id = $request->sub_category;
         $product->child_category_id = $request->child_category;
         $product->brand_id = $request->brand;
         $product->qty = $request->qty;
@@ -184,9 +213,10 @@ class ProductController extends Controller
         $product->is_featured = $request->is_featured;
         $product->status = $request->status;
         $product->seo_title = $request->seo_title;
-        $product->is_approved = $request->is_approved;
         $product->seo_description = $request->seo_description;
         $product->save();
+
+        return redirect()->route('admin.products.index')->with('success', 'Producto actualizado exitosamente.');
     }
 
     /**
@@ -194,6 +224,25 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+
+            $product = Product::findOrFail($id);
+
+            if ($product->thumb_image && Storage::exists('product/' . $product->thumb_image)) {
+                Storage::delete('product/' . $product->thumb_image);
+            }
+
+            $product->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Producto eliminado con éxito.'
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No se pudo eliminar el producto. Inténtalo nuevamente.'
+            ], 500);
+        }
     }
 }

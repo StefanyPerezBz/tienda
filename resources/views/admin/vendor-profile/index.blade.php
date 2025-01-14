@@ -53,11 +53,13 @@
                                     <div class="form-group">
                                         <label>Teléfono</label>
                                         <div class="alert alert-primary mt-2" id="phone-info-alert">
-                                            Agrega +número del país y los dígitos del teléfono. <strong>Ejemplo: +5134567890</strong>
+                                            Agrega +número del país y los dígitos del teléfono. <strong>Ejemplo:
+                                                +5134567890</strong>
                                         </div>
                                         <input type="text" class="form-control" id="phone" name="phone"
-                                            value="{{ $profile->phone }}" placeholder="Teléfono (ej. +1234567890)"  pattern="^\+?[1-9]\d{1,14}$" title="Agrega +numero de país y los dígitos del teléfono" required
-                                            autofocus>
+                                            value="{{ $profile->phone }}" placeholder="Teléfono (ej. +1234567890)"
+                                            pattern="^\+?[1-9]\d{1,14}$"
+                                            title="Agrega +numero de país y los dígitos del teléfono" required autofocus>
                                         <div class="invalid-feedback">
                                             Por favor ingrese el teléfono
                                         </div>
@@ -151,7 +153,9 @@
 
         </div>
     </section>
+@endsection
 
+@push('scripts')
     <script>
         // Cambiar la imagen
         document.getElementById("image").addEventListener('change', cambiarImagen);
@@ -175,4 +179,4 @@
                 console.error(error);
             });
     </script>
-@endsection
+@endpush
